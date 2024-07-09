@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .calculator {
+      width: 100%;
+      max-width: 600px; /* Increase the max-width to make the calculator larger */
+      background-color: #f2f2f2;
+      border: 1px solid #ccc;
+      padding: 20px; /* Increase the padding for better spacing */
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); /* Increase the number of columns to 4 */
+      grid-gap: 10px; /* Increase the grid gap for better spacing */
+      margin: auto;
+    }
+
+    .calculator input {
+      grid-column: 1 / span 4; /* Span the entire width of the calculator */
+      margin-bottom: 10px;
+      padding: 20px; /* Increase the padding for better spacing */
+      text-align: right;
+      font-size: 36px; /* Increase the font size for better visibility */
+    }
+
+    .calculator button {
+      padding: 20px; /* Increase the padding for better spacing */
+      font-size: 24px; /* Increase the font size for better visibility */
+      text-align: center;
+      flex: 1;
+    }
+
+    .calculator button.operator {
+      background-color: #ff9800;
+      color: #fff;
+    }
+
+    .calculator button.clear {
+      background-color: #f44336;
+      color: #fff;
+    }
+
+    /* Media query for mobile devices */
+    @media (max-width: 600px) {
+      .calculator {
+        width: 90%;
+        grid-template-columns: repeat(3, 1fr); /* Reduce the number of columns to 3 for better fit on smaller screens */
+        grid-gap: 5px; /* Reduce the grid gap for better fit on smaller screens */
+      }
+
+      .calculator input {
+        padding: 10px; /* Reduce the padding for better fit on smaller screens */
+        font-size: 24px; /* Reduce the font size for better fit on smaller screens */
+      }
+
+      .calculator button {
+        padding: 10px; /* Reduce the padding for better fit on smaller screens */
+        font-size: 18px; /* Reduce the font size for better fit on smaller screens */
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="calculator">
+    <input type="text" id="display" readonly>
+    <button onclick="clearDisplay()" class="clear">C</button>
+    <button onclick="appendToDisplay('7')">7</button>
+    <button onclick="appendToDisplay('8')">8</button>
+    <button onclick="appendToDisplay('9')">9</button>
+    <button onclick="appendToDisplay('4')">4</button>
+    <button onclick="appendToDisplay('5')">5</button>
+    <button onclick="appendToDisplay('6')">6</button>
+    <button onclick="appendToDisplay('1')">1</button>
+    <button onclick="appendToDisplay('2')">2</button>
+    <button onclick="appendToDisplay('3')">3</button>
+    <button onclick="appendToDisplay('0')">0</button>
+    <button onclick="appendToDisplay('.')">.</button>
+    <button onclick="calculate()">=</button>
+    <button onclick="backspace()">⌫</button>
+    <button onclick="appendToDisplay('+')" class="operator">+</button>
+    <button onclick="appendToDisplay('-')" class="operator">-</button>
+    <button onclick="appendToDisplay('*')" class="operator">*</button>
+    <button onclick="appendToDisplay('/')" class="operator">/</button>
+  </div>
+
+  <p style="text-align: center;">Total count of numbers inputted: <span id="count"></span></p>
+
+  <script>
+    var count = 0;
+
+    function appendToDisplay(value) {
+      var display = document.getElementById("display");
+      if (display.value.length === 100) {
+        return; // Prevent further input if expression length is already 100
+      }
+      display.value += value;
+      if (!isNaN(value)) {
+        count++;
+      }
+      updateCount();
+    }
+
+    function clearDisplay() {
+      document.getElementById("display").value = "";
+      count = 0;
+      updateCount();
+    }
+
+    function calculate() {
+      var expression = document.getElementById("display").value;
+      if (expression.length === 100) {
+        document.getElementById("error").innerText = "Expression length exceeded 100 characters.";
+        return; // Display error message if expression length is 100
+      }
+      var result = eval(expression);
+      document.getElementById("display").value = result;
+    }
+
+    function updateCount() {
+      document.getElementById("count").innerText = count;
+    }
+
+    function backspace() {
+      var display = document.getElementById("display");
+      display.value = display.value.slice(0, -1);
+      if (!isNaN(display.value.slice(-1))) {
+        count--;
+      }
+      updateCount();
+    }
+  </script>
+</body>
+</html>
